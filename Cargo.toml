@@ -1,0 +1,19 @@
+[package]
+name = "cats_pic_bot"
+version = "0.1.0"
+authors = ["danila.fomin <danila.fomin@corp.mail.ru>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.11", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+rand = { version = "0.8" }
+teloxide = { version = "0.4" }
+log = { version = "0.4", features = ["serde"] }
+pretty_env_logger = { version = "0.4" }
+lazy_static = { version = "1" }
+openssl-probe = { version = "0.1" }
+config = { version = "0.11" }
