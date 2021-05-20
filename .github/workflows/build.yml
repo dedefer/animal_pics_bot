@@ -12,8 +12,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           tags: search_pics_bot:latest
-          outputs:
-            - type=local,dest=search_pics_bot.tgz
+          outputs: type=local,dest=search_pics_bot.tgz
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
