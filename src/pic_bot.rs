@@ -42,7 +42,7 @@ impl PicBot {
             None => {
                 message.answer(format!("no images for query {:?}", text)).send().await?;
                 return Ok(())
-            }
+            },
         };
 
         message.answer_photo(InputFile::url(url)).send().await?;
