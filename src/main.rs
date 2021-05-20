@@ -5,7 +5,6 @@ mod settings;
 use std::error::Error;
 
 use settings::Settings;
-use tokio::spawn;
 
 use crate::pic_bot::PicBot;
 
@@ -18,7 +17,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let bot = PicBot::new(config.bot_token, config.api_token);
 
-    spawn(bot.start());
+    bot.start().await;
 
     Ok(())
 }
