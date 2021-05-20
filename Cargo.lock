@@ -72,7 +72,6 @@ name = "cats_pic_bot"
 version = "0.1.0"
 dependencies = [
  "config",
- "lazy_static",
  "log",
  "openssl-probe",
  "pretty_env_logger",

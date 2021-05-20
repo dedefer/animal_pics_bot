@@ -1,4 +1,4 @@
-use std::error::Error;
+use std::{error::Error, sync::Arc};
 
 use teloxide::{Bot, prelude::{Request, UpdateWithCx}, types::{InputFile, Message}};
 
@@ -17,18 +17,23 @@ impl PicBot {
         }
     }
 
-    pub async fn start(&'static self) {
+    pub async fn start(self) {
         teloxide::enable_logging!();
 
         log::info!("starting bot");
 
-        teloxide::repl(
-            self.bot.clone(),
-            move |m| self.answer(m),
-        ).await
+        let slf = Arc::new(self);
+
+        let requester = slf.bot.clone();
+        let handler = move |m| {
+            let bot = slf.clone();
+            async move { bot.answer(m).await }
+        };
+
+        teloxide::repl(requester, handler).await
     }
 
-    async fn answer(&'static self, message: UpdateWithCx<Bot, Message>) -> Result<(), Box<dyn Error + Send + Sync>> {
+    async fn answer(&self, message: UpdateWithCx<Bot, Message>) -> Result<(), Box<dyn Error + Send + Sync>> {
         let text = match message.update.text() {
             Some(t) => t,
             None => {
