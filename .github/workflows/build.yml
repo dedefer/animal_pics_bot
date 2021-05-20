@@ -1,0 +1,21 @@
+name: build
+on: [push]
+jobs:
+  build-bot-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: set up docker buildx
+        uses: docker/setup-buildx-action@v1
+      - name: build
+        uses: docker/build-push-action@v2
+        with:
+          tags: search_pics_bot:latest
+      - name: save
+        run: docker save search_pics_bot:latest > search_pics_bot.tgz
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: search_pics_bot.tgz
+          path: search_pics_bot.tgz
