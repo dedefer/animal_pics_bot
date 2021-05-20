@@ -12,8 +12,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           tags: search_pics_bot:latest
-          outputs: type=local,dest=search_pics_bot.tgz
+          outputs: type=docker
+      - name: docker save
+        run: docker save search_pics_bot:latest > search_pics_bot.tgz
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
           path: search_pics_bot.tgz
+          name: search_pics_bot.tgz
