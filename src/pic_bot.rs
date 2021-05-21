@@ -27,13 +27,21 @@ impl PicBot {
         let requester = slf.bot.clone();
         let handler = move |m| {
             let bot = slf.clone();
-            async move { bot.answer(m).await }
+            async move {
+                match bot.answer(&m).await {
+                    err@Err(_) => {
+                        let _ = m.answer("some error occured(").send().await;
+                        err
+                    },
+                    ok => ok,
+                }
+            }
         };
 
         teloxide::repl(requester, handler).await
     }
 
-    async fn answer(&self, message: UpdateWithCx<Bot, Message>) -> Result<(), Box<dyn Error + Send + Sync>> {
+    async fn answer(&self, message: &UpdateWithCx<Bot, Message>) -> Result<(), Box<dyn Error + Send + Sync>> {
         let text = match message.update.text() {
             Some(t) => t,
             None => {

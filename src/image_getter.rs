@@ -28,7 +28,7 @@ impl ImageGetter {
             return Ok(None)
         }
 
-        let page = 1 + random::<i32>() % total_results / 80 + i32::from(total_results % 80 != 0);
+        let page = 1 + random::<i32>() % (total_results / 80 + i32::from(total_results % 80 != 0));
 
         let mut photos: Photos = self.client.get("https://api.pexels.com/v1/search/")
             .header("Authorization", self.token.as_str())
@@ -38,6 +38,13 @@ impl ImageGetter {
                 ("page", page.to_string().as_str()),
             ]).send().await?
             .json().await?;
+
+        if photos.photos.len() == 0 {
+            return Err(format!(
+                "first req total_results={}, calculated page={}, new total_results={}, but photos.photos.len()=0",
+                total_results, page, photos.total_results,
+            ).into())
+        }
 
         let photo_idx = random::<usize>() % photos.photos.len();
 
