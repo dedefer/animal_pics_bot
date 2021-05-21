@@ -29,10 +29,9 @@ impl PicBot {
             let bot = slf.clone();
             async move {
                 match bot.answer(&m).await {
-                    err@Err(_) => {
-                        let _ = m.answer("some error occured(").send().await;
-                        err
-                    },
+                    err@Err(..) =>
+                        m.answer("some error occured(").send().await
+                            .map_err(Into::into).and(err),
                     ok => ok,
                 }
             }
